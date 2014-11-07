@@ -1,0 +1,21 @@
+{
+  "marcas": [
+    {
+      "marca": "Chevrolet",
+      "modelo": [
+        {
+          "nombre": "Aveo",
+          "image": "images/aveo.jpg",
+          "modelo": "2000-2014",
+          "tab": "aveo"
+        },
+        {
+        "nombre": "Captiva",
+        "image": "images/captiva.jpg",
+        "modelo": "2000-2014",
+        "tab": "captiva"
+        }
+      ]
+    }
+  ]
+}

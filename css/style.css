@@ -1,0 +1,120 @@
+@font-face {
+    font-family: 'open_sanslight';
+    src: url('../fonts/opensans-light-webfont.eot');
+    src: url('../fonts/opensans-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/opensans-light-webfont.woff') format('woff'),
+         url('../fonts/opensans-light-webfont.ttf') format('truetype'),
+         url('../fonts/opensans-light-webfont.svg#open_sanslight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+body {
+  cursor: url('http://ionicframework.com/img/finger.png'), auto;
+}
+.slider {
+  width: 100%;
+  background: #000;
+}
+.slider-slide {
+  text-align: center;
+  background: #000;
+  min-height: 360px;
+  width: 100%;
+}
+
+.slider-slide img{
+  width: 100%;
+}
+
+.black{
+	background: #000;
+}
+.opensans{
+	font-family: 'open_sanslight';
+	font-size: 14px;
+}
+.icontact{
+	font-size: 20px;
+	color: #EF002F;
+	position: relative;
+}
+.textsend{
+	font-size: 18px;
+	font-weight: bold;
+}
+.titlecontact{
+	font-family: 'open_sanslight';
+	font-size: 22px;
+	text-align: center;
+}
+.icon-contact{
+	font-size: 28px;
+	text-align: center;
+	color: #EF002F;
+}
+
+.icon-semaforo img{
+	width: 150px;
+	margin-left:-75px;
+	left: 50%;
+	position: relative;
+}
+.marca-nombre{
+	font-family: 'open_sanslight';
+	font-size: 20px;
+}
+.marca-nombre img{
+	width: 70px;
+}
+
+.marca-nombre h2{
+	font-family: 'open_sanslight';
+	line-height: 40px;
+	font-size: 18px;
+}
+
+.marca-nombre i{
+	color: #EF002F;
+}
+
+.icon-back{
+  color: #ffffff !important;
+  font-size: 40px !important;
+  border:0 !important; 
+  line-height: 60px !important;
+}
+
+.models{
+	font-size: 16px;
+	line-height: 40px;
+}
+
+.models i{
+	color: #EF002F;
+}
+
+.models a{
+	font-family: 'open_sanslight';
+	color: #000;
+	text-decoration: none;
+}
+
+.marcas-rep{
+	font-family: 'open_sanslight';
+}
+
+.marcas-rep h2{
+	font-family: 'open_sanslight';
+}
+.marcas-rep a{
+	display: block;
+	color: #EF002F;
+	font-size: 14px;
+	margin: 10px 0;
+}
+
+.marcas-rep img{
+	width: 100%;
+}
