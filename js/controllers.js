@@ -11,9 +11,9 @@
           "modelo": [
             {"nombre":"Aveo", "tab":"aveo", "modelo":"1990-2014", "repuestos":
               [
-                {"nombre":"Espejos", "cantidad":"8", "articulos":[{"nombre":"Espejo Marca 01","material":"Metal-Plastico","imagenes":[{"image":"img/farola.jpg"},{"image":"img/farola.jpg"}]}]},
+                {"nombre":"Farolas", "cantidad":"8", "articulos":[{"nombre":"Farola Marca 01","material":"Metal-Plastico","imagenes":[{"image":"img/farola.jpg"},{"image":"img/farola2.jpg"},{"image":"img/farola3.jpg"}]}]},
                 {"nombre":"Exploradoras", "cantidad":"4"},
-                {"nombre":"Farolas", "cantidad":"9"},
+                {"nombre":"Espejos", "cantidad":"9"},
                 {"nombre":"Sonido", "cantidad":"8"},
                 {"nombre":"Stops", "cantidad":"10"}
               ]

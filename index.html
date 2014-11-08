@@ -149,15 +149,15 @@
             <div ng-repeat="model in mod.modelo">
               <div class="list">
                 <div class="item" ng-repeat="rep in model.repuestos">
-                  <h2 ng-click="toggleCustom()">{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <a ng-click="toggleCustom()"><h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span></a>
                   <div ng-repeat="art in rep.articulos">
                     
                     <div ng-hide="custom">
                     <br />
                       <div ng-repeat="ima in art.imagenes">
                         <img ng-src="{{ima.image}}" alt="" />
-                        <div><h2><i class="icon ion-checkmark-circled balanced"></i> {{art.nombre}}</h2></div>
-                        <div><h2><i class="icon ion-settings balanced"></i> {{art.material}}</h2></div>
+                        <div><h2><i class="icon ion-checkmark-circled positive"></i> {{art.nombre}}</h2></div>
+                        <div><h2><i class="icon ion-settings dark"></i> Marerial: {{art.material}}</h2></div>
                     <br />
                       </div>
                     </div>
@@ -192,16 +192,15 @@
 
     <script id="templates/contact.html" type="text/ng-template">
       <ion-view>
-        <ion-content class="padding" ng-controller="MyController">
+        <ion-content ng-controller="MyController" class="opensans">
 
-        <div class="icon-semaforo"><img src="img/semaforo-icon.png" alt="" width="150" heigth="50" /></div>
+        <div class="icon-semaforo"><img src="img/img-contact.jpg" alt="" /></div>
 
-        <h2 class="titlecontact"><i class="icon ion-gear-b"></i> Lujos y Accesorios El Semaforo</h2>
         <br />
         
         <div class="row">
           <div class="col col-10"><i class="icon ion-location icon-contact"></i></div>
-          <div class="col">Calle 65 N° 27a - 35 Barrio Siete de Agosto</div>
+          <div class="col">Calle 65 N° 27a - 35 <br />Barrio Siete de Agosto</div>
         </div>
 
         <div class="row">

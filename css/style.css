@@ -33,7 +33,7 @@ body {
 }
 .opensans{
 	font-family: 'open_sanslight';
-	font-size: 14px;
+	font-size: 16px;
 }
 .icontact{
 	font-size: 20px;
@@ -50,16 +50,13 @@ body {
 	text-align: center;
 }
 .icon-contact{
-	font-size: 28px;
+	font-size: 32px;
 	text-align: center;
 	color: #EF002F;
 }
 
 .icon-semaforo img{
-	width: 150px;
-	margin-left:-75px;
-	left: 50%;
-	position: relative;
+	width: 100%;
 }
 .marca-nombre{
 	font-family: 'open_sanslight';
