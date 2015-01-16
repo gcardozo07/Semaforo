@@ -1,0 +1,3089 @@
+<!DOCTYPE html>
+<html ng-app="appme">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="css/app.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/directives.js"></script>
+
+    <!-- ionic/firebase js -->
+    <script src='https://cdn.firebase.com/js/client/1.1.1/firebase.js'></script>
+    <script src='https://cdn.firebase.com/libs/angularfire/0.8.0/angularfire.min.js'></script>
+  </head>
+  <body>
+
+    <ion-nav-bar class="nav-title-slide-ios7 bar-positive">
+      <ion-nav-back-button class="icon-back ion-arrow-left-c">
+      </ion-nav-back-button>
+      <h1 class="title"><img class="title-image" src="img/elsemaforo.png" width="300" /></h1>
+    </ion-nav-bar>
+             
+    <ion-nav-view animation="slide-left-right"></ion-nav-view>
+
+
+<!-- tabs views -->
+    <script id="templates/tabs.html" type="text/ng-template">
+      
+      <ion-tabs class="tabs-icon-top tabs-dark">
+
+        <ion-tab icon="ion-speedometer" title="Inicio" href="#/tab/home">
+          <ion-nav-view name="home-tab"></ion-nav-view>
+        </ion-tab>
+
+        <ion-tab icon="ion-model-s" title="Marcas" href="#/tab/catalogotab">
+          <ion-nav-view name="catalogotab-tab"></ion-nav-view>
+        </ion-tab>
+
+        <ion-tab icon="ion-location" title="Contacto" ui-sref="tabs.contact">
+          <ion-nav-view name="contact-tab"></ion-nav-view>
+        </ion-tab>
+
+      </ion-tabs>
+
+    </script>
+
+<!-- end tabs views -->
+
+<!-- template views -->
+    <script id="templates/home.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="black">
+          <ion-slide-box does-continue="true" 
+                     show-pager='true'
+                     slide-interval="3000"
+                     auto-play="true"
+                     on-slide-changed="slideChanged(index)">
+          <ion-slide>
+            <img ng-src="img/slide-01.jpg" />
+          </ion-slide>
+          <ion-slide>
+            <img ng-src="img/slide-02.jpg" />
+          </ion-slide>
+          <ion-slide>
+            <img ng-src="img/slide-03.jpg" />
+          </ion-slide>
+        </ion-slide-box>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/catalogo.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="padding">
+          <h1>Test</h1>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/facts2.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="padding">
+          <p>111,111,111 x 111,111,111 = 12,345,678,987,654,321</p>
+          <p>1 in every 4 Americans has appeared on T.V.</p>
+          <p>11% of the world is left-handed.</p>
+          <p>1 in 8 Americans has worked at a McDonalds restaurant.</p>
+          <p>$283,200 is the absolute highest amount of money you can win on Jeopardy.</p>
+          <p>101 Dalmatians, Peter Pan, Lady and the Tramp, and Mulan are the only Disney cartoons where both parents are present and don't die throughout the movie.</p>
+          <p>
+            <a class="button icon ion-home" href="#/tab/home"> Home</a>
+            <a class="button icon ion-chevron-left" href="#/tab/facts"> Scientific Facts</a>
+          </p>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/catalogotab.html" type="text/ng-template">
+      <ion-view>
+        <ion-content>
+        <div ng-controller="marcasController">
+
+            <div class="marca-nombre" ng-repeat="marca in marcas">
+              <a class="item item-avatar item-icon-right" ng-href="#/tab/{{marca.tab}}">
+                <img ng-src="{{marca.image}}">
+                <h2>{{marca.nombre}}</h2>
+                <i class="icon ion-android-search"></i>
+              </a>
+            </div>
+
+          </div>
+
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/chevrolet.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/aveo.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter: 'aveo'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/captiva.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'captiva'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/cheyenne.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'cheyenne'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+    
+     <script id="templates/cobalt.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'cobalt'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/corsa.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'corsa'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/corsaevol.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'corsa evolution'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/cruze.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'cruze'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/dmax.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'dmax'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/luv.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'luv'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/luv-dmax.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'luv-dmax'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/optra.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'optra'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/orlando.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'orlando'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/sail.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'sail'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/silverado.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'silverado'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/sonic.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'sonic'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/spark.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'spark'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/sprint.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'sprint'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/swift.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'swift'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/tracker.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'tracker'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/vitara.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'chevrolet'">
+            <div ng-repeat="model in mod.modelo | filter:'vitara'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/daihatsu.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'Daihatsu'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/terios.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'Daihatsu'">
+            <div ng-repeat="model in mod.modelo | filter:'terios'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/dodge.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'dodge'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+    
+    <script id="templates/journey.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'Dodge'">
+            <div ng-repeat="model in mod.modelo | filter:'journey'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/ram.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'Dodge'">
+            <div ng-repeat="model in mod.modelo | filter:'ram'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+          
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/fiat.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'fiat'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/strada.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'fiat'">
+            <div ng-repeat="model in mod.modelo | filter:'strada'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/ford.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'ford'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/ecosport.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+        <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'ford'">
+            <div ng-repeat="model in mod.modelo | filter:'ecosport'">
+              <div class="list">
+                <div class="item" ng-repeat="rep in model.repuestos">
+                  <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                  <div ng-repeat="art in rep.articulos">
+                    <div>
+                    <br />
+                      <div ng-repeat="ima in art.imagenes">
+                        <img ng-src="{{ima.image}}" alt="" />
+                        <br />
+                        <br />
+                      </div>
+                    </div>
+                  </div>
+                <div>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/edge.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'ford'">
+              <div ng-repeat="model in mod.modelo | filter:'edge'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/escape.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'ford'">
+              <div ng-repeat="model in mod.modelo | filter:'escape'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/explorer.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'ford'">
+              <div ng-repeat="model in mod.modelo | filter:'explorer'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/f150.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'ford'">
+              <div ng-repeat="model in mod.modelo | filter:'f150'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/lobo.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'ford'">
+              <div ng-repeat="model in mod.modelo | filter:'lobo'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/ranger2014.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'ford'">
+              <div ng-repeat="model in mod.modelo | filter:'ranger2014'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/fiesta2014.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'ford'">
+              <div ng-repeat="model in mod.modelo | filter:'fiesta2014'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/ranger2006.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'ford'">
+              <div ng-repeat="model in mod.modelo | filter:'ranger2006'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/foton.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'foton'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/tunland.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'foton'">
+              <div ng-repeat="model in mod.modelo | filter:'tunland'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/honda.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'honda'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/city.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'honda'">
+              <div ng-repeat="model in mod.modelo | filter:'city'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/civic.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'honda'">
+              <div ng-repeat="model in mod.modelo | filter:'civic'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/crv2014.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'honda'">
+              <div ng-repeat="model in mod.modelo | filter:'crv2014'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/integra.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'honda'">
+              <div ng-repeat="model in mod.modelo | filter:'integra'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/hyundai.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'hyundai'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/accentnext.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'hyundai'">
+              <div ng-repeat="model in mod.modelo | filter:'accentnext'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/accentvision.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'hyundai'">
+              <div ng-repeat="model in mod.modelo | filter:'accentvision'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/atos.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'hyundai'">
+              <div ng-repeat="model in mod.modelo | filter:'atos'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/genesis.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'hyundai'">
+              <div ng-repeat="model in mod.modelo | filter:'genesis'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/getz.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'hyundai'">
+              <div ng-repeat="model in mod.modelo | filter:'getz'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/grandi10.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'hyundai'">
+              <div ng-repeat="model in mod.modelo | filter:'grandi10'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/h1diesel.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'hyundai'">
+              <div ng-repeat="model in mod.modelo | filter:'h1diesel'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/i25.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'hyundai'">
+              <div ng-repeat="model in mod.modelo | filter:'i25'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/i35.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'hyundai'">
+              <div ng-repeat="model in mod.modelo | filter:'i35'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/santafe2014.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'hyundai'">
+              <div ng-repeat="model in mod.modelo | filter:'santafe2014'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/santafe2006.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'hyundai'">
+              <div ng-repeat="model in mod.modelo | filter:'santafe2006'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/tucson.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'hyundai'">
+              <div ng-repeat="model in mod.modelo | filter:'tucson'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/tucsonix35.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'hyundai'">
+              <div ng-repeat="model in mod.modelo | filter:'tucsonix35'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/jeep.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'jeep'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/cherokee.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'jeep'">
+              <div ng-repeat="model in mod.modelo | filter:'cherokee'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/wrangler.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'jeep'">
+              <div ng-repeat="model in mod.modelo | filter:'wrangler'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/kia.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'kia'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/cerato.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'kia'">
+              <div ng-repeat="model in mod.modelo | filter:'cerato'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/koup.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'kia'">
+              <div ng-repeat="model in mod.modelo | filter:'koup'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/newsoul.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'kia'">
+              <div ng-repeat="model in mod.modelo | filter:'newsoul'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/picanto.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'kia'">
+              <div ng-repeat="model in mod.modelo | filter:'picanto'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/riospice.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'kia'">
+              <div ng-repeat="model in mod.modelo | filter:'riospice'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/riostylus.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'kia'">
+              <div ng-repeat="model in mod.modelo | filter:'riostylus'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/sorento.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'kia'">
+              <div ng-repeat="model in mod.modelo | filter:'sorento'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/sportagefq.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'kia'">
+              <div ng-repeat="model in mod.modelo | filter:'sportagefq'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/sportagerevolution.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'kia'">
+              <div ng-repeat="model in mod.modelo | filter:'sportagerevolution'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/mahindra.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'mahindra'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/pickup.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'mahindra'">
+              <div ng-repeat="model in mod.modelo | filter:'pickup'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/mazda.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'mazda'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/allegro.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'mazda'">
+              <div ng-repeat="model in mod.modelo | filter:'allegro'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/bt50.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'mazda'">
+              <div ng-repeat="model in mod.modelo | filter:'bt50'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/cx5.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'mazda'">
+              <div ng-repeat="model in mod.modelo | filter:'cx5'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/mazda2.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'mazda'">
+              <div ng-repeat="model in mod.modelo | filter:'mazda2'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/mazda3.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'mazda'">
+              <div ng-repeat="model in mod.modelo | filter:'mazda3'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/mazda6.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'mazda'">
+              <div ng-repeat="model in mod.modelo | filter:'mazda6'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/mitsubishi.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'mitsubishi'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/l200.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'mitsubishi'">
+              <div ng-repeat="model in mod.modelo | filter:'l200'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/montero.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'mitsubishi'">
+              <div ng-repeat="model in mod.modelo | filter:'montero'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/nissan.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'nissan'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/frontier.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'nissan'">
+              <div ng-repeat="model in mod.modelo | filter:'frontier'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/march.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'nissan'">
+              <div ng-repeat="model in mod.modelo | filter:'march'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/navara.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'nissan'">
+              <div ng-repeat="model in mod.modelo | filter:'navara'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/newversa.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'nissan'">
+              <div ng-repeat="model in mod.modelo | filter:'newversa'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/notesense.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'nissan'">
+              <div ng-repeat="model in mod.modelo | filter:'notesense'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/sentra.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'nissan'">
+              <div ng-repeat="model in mod.modelo | filter:'sentra'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/tiida.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'nissan'">
+              <div ng-repeat="model in mod.modelo | filter:'tiida'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/peugeot.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'peugeot'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/206.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'peugeot'">
+              <div ng-repeat="model in mod.modelo | filter:'206'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/rambig.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'rambig'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/1500.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'rambig'">
+              <div ng-repeat="model in mod.modelo | filter:'1500'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/2500.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'rambig'">
+              <div ng-repeat="model in mod.modelo | filter:'2500'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/renault.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="models" ng-controller="marcasController">
+          <div class="list" ng-repeat="mod in marcas | filter: 'renault'">
+            <div ng-repeat="model in mod.modelo">
+              <a class="item item-icon-left" ng-href="#/tab/{{model.tab}}">
+                <i class="icon ion-chevron-right"></i>
+                {{model.nombre}} 
+              </a>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/clio.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'renault'">
+              <div ng-repeat="model in mod.modelo | filter:'clio'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/duster.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'renault'">
+              <div ng-repeat="model in mod.modelo | filter:'duster'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/koleos.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'renault'">
+              <div ng-repeat="model in mod.modelo | filter:'koleos'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/logan.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'renault'">
+              <div ng-repeat="model in mod.modelo | filter:'logan'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/megane1.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'renault'">
+              <div ng-repeat="model in mod.modelo | filter:'megane1'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/megan2.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'renault'">
+              <div ng-repeat="model in mod.modelo | filter:'megan2'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/sandero.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'renault'">
+              <div ng-repeat="model in mod.modelo | filter:'sandero'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/scenic.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'renault'">
+              <div ng-repeat="model in mod.modelo | filter:'scenic'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/symbol.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'renault'">
+              <div ng-repeat="model in mod.modelo | filter:'symbol'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/twingo.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="marcasController">
+          <div class="list marcas-rep" ng-repeat="mod in marcas | filter: 'renault'">
+              <div ng-repeat="model in mod.modelo | filter:'twingo'">
+                <div class="list">
+                  <div class="item" ng-repeat="rep in model.repuestos">
+                    <h2>{{rep.nombre}}</h2><span class="badge badge-assertive">{{rep.cantidad}}</span>
+                    <div ng-repeat="art in rep.articulos">
+                      <div>
+                      <br />
+                        <div ng-repeat="ima in art.imagenes">
+                          <img ng-src="{{ima.image}}" alt="" />
+                          <br />
+                          <br />
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/jeanbig.html" type="text/ng-template">
+      <ion-view>
+        <ion-content class="black" ng-controller="bigController as bigCtrl">
+          <div class="content-big">
+            <div class="image-big-wraper"><img ng-src="{{bigCtrl.big.imagebig}}" /></div>
+            <div class="jean-detail padding">
+              <h1>Adele</h1>
+              <li>{{bigCtrl.big.estilo}}</li>
+              <li>Talla: {{bigCtrl.big.talla}}</li>
+              <li>{{bigCtrl.big.material}}</li>
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="templates/contact.html" type="text/ng-template">
+      <ion-view>
+        <ion-content ng-controller="MyController" class="opensans">
+
+        <div class="icon-semaforo"><img src="img/img-contact.jpg" alt="" /></div>
+
+        <br />
+        
+        <div class="row">
+          <div class="col col-10"><i class="icon ion-location icon-contact"></i></div>
+          <div class="col">Calle 65 N° 27a - 35 <br />Barrio Siete de Agosto</div>
+        </div>
+
+        <div class="row">
+          <div class="col col-10"><i class="icon ion-iphone icon-contact"></i></div>
+          <div class="col">3110934 - 5442501 - 2403527</div>
+        </div>
+
+        <div class="row">
+          <div class="col col-10"><i class="icon ion-email icon-contact"></i></div>
+          <div class="col"><a href="mailto:lujoselsemaforo@hotmail.com" class="positive">lujoselsemaforo@hotmail.com</a></div>
+        </div>
+        <hr/>
+        
+        
+      
+        
+        <div ng-controller="formCtrl">
+          
+        <div class="row">
+          <div class="col col-100"><h1 class="opensans"> Ingrese los datos del accesorio que necesite y le responderemos en seguida...</h1></div>
+        </div>
+          <div><button ng-click="toggleCustom()" class="button icon-left ion-clipboard button-positive button-block">Ingresar Datos</button></div>
+
+        
+        <form name="form" novalidate class="css-form padding"  ng-hide="custom">
+
+      
+        
+        <label for='nombreInput'></label>
+        <input ng-model='nombre' type='text' name="uName" id='nombreInput' placeholder='Nombre'>
+        <hr/>
+        <label for='correoInput'></label>
+        <input ng-model='correo' type='email' name="uEmail" required id='correoInput' placeholder='Correo'>
+        <hr/>
+        <label for='marcaInput'></label>
+        <input ng-model='marca' type='text' name="uMarca" required id='marcaInput' placeholder='Marca'>
+        <hr/>
+        <label for='modeloInput'></label>
+        <input ng-model='modelo' type='text' name="uModelo" required id='modeloInput' placeholder='Modelo'>
+        <hr/>
+        <label for='accesorioInput'></label>
+        <input ng-model='accesorio' type='text' name="uAccesorio" required id='accesorioInput' placeholder='Accesorio'>
+
+          <div ng-show="form.uEmail.$dirty && form.uEmail.$invalid">
+            <span ng-show="form.uName.$error.required">Tell us your email.</span>
+            <span ng-show="form.uEmail.$error.email" class="text-valid"><i class="ion-close-circled"></i> Por favor Ingresa un Correo valido</span>
+          </div>
+        <br/>
+        <a class="button icon-left ion-paper-airplane button-outline button-positive" ng-click="addMessage($event)" ng-disabled="form.$invalid || isUnchanged(user)"><span class="textsend">enviar</span></a>
+      </form>
+      </div>
+
+      
+        </ion-content>
+      </ion-view>
+    </script>
+
+<!-- template views -->
+  </body>
+</html>
